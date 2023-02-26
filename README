@@ -1,3 +1,6 @@
+This is a verifier for a simplified java language. This was created for a Object Oriented Programming course 
+at university. Regex was the main focus of this project.
+
 
 ########################################            DESIGN            ########################################
 
@@ -12,6 +15,8 @@ validity of the code file.
 Exceptions - there are many new exception classes we created. later in this readme we explain how we handled
 exceptions in our project.
 
+------------------------------------
+
 main.databases package:
 this subpackage contains the database classes.
 
@@ -20,6 +25,8 @@ by line. we can then easily get lines by index, and iterate through the lines in
 
 MethodsDatabase.java - this class is responsible for holding the database of methods declared in the sjava
 file. It holds an arraylist of methods so that we can easily iterate through the methods in the file.
+
+------------------------------------
 
 main.program_components package:
 this subpackage contains the program components classes.
@@ -110,89 +117,3 @@ methods:
 whole programs:
 46 | whole programs | everything | legal
 47 | whole programs | variable focused | legal
-
-########################################        ERROR HANDLING        ########################################
-
-We decided to handle errors by throwing errors the moment they are discovered. We do this by throwing a
-specific type of exception that is most relevant to the error in the code, and by giving the exception
-constructor an input of a string that constitutes a message explaining exactly what the problem was. This way
-the user can get a more specific and accurate explanation of what the error in the code is. If we were to
-throw an 'empty' exception and only where we catch it print a message, we can't know exactly where the error
-happened and give a specific error message. The exception is bubbled up the chain until it is finally caught
-by the main method. Based on the type of exception caught, a error code is printed (if an IOException is
-caught the code '2' is printed, otherwise '1'), followed by the error message.
-
-########################################        PROGRAM DESIGN        ########################################
-
-Firstly we thought of creating an abstract class "Type" and have many different classes "int",
-"boolean", etc., inherit from it. Then we could create a TypeFactory. But once we actually worked on the Type
-class, we noticed that there really wasn't much substance to it, and creating separate classes for each type
-would be pointless. So, we made Type an enum instead with some static functions for differentiating between
-the types and their assignment accepted types.
-
-We realized that we would need to keep track of which scope each variable declared belongs to, and that we
-would have to keep the scopes in order. therefore, we created the Scope class. Each scope has a hashmap of
-its variables, and also a list of superscopes (explained above). Now, while going over a scope, if we reach
-another scope that opens inside it, we create a new scope instance, and give it in the constructor "our" list
-of superscopes, except we add ourselves ("this") to the beginning of the list. Now, we are the first
-superscope for the new scope we created. Everytime a scope looks for a variable, it first checks its own
-variables, and then moves on to its superscopes' variables, one by one in ascending order, as is necessary.
-
-Another thing we realized is that a method is a sort of scope, so we made the Method class inherit from the
-Scope class. its variables would be the global variables. Also, since changing a global variable in a method
-does not change the variable for other methods, we deepcopy the global variables for every method that is
-declared.
-
-For the lines of code and for the methods, we decided to create classes that act as databases, and we can
-easily add, and get lines and methods from these static databases.
-
-The main outline of the program is 3 stepped:
-step 1: read the lines of the sjava file into the LinesDatabase.
-step 2: go once over the global statements (variable declarations and assignments), and when encountering a
-method declaration, add the method to the MethodDatabase.
-step 3: iterate over the methods in the database, and check the validity of the code within each method.
-
-########################################           QUESTIONS          ########################################
-
-Question: How would you modify your code to add new types of variables (e.g., float)?
-Answer: All we would need to do is add the type to the Type enum, and within the methods of the enum add a
-case for the new type, and finally update the regex of variable declaration prefix to support the new type.
-
-Question: How would you add different methods’ return types (i.e int foo())?
-Answer: Firstly the regex of the method declaration prefix would need to be updated to support the different
-types. Secondly, we would give the method class a field "returnType" of type Type, that would hold the return
-type of the method. Next, we would need to check that every return statement is followed by a value or
-variable of the correct type. We would also create a new exception class "BadReturnTypeException" for when
-the wrong type is returned from a function. Finally, we would need to support assignments from function calls
-so we would need to allow all assignments to be function calls as well, as long as the function has an
-acceptable return type for the receiving variable.
-
-Question: How would you add classes?
-Answer: We would add a regex for the class keyword, and we would create within the databases package a class
-ClassesDatabase where during the first pass on the global scope we would add any class we come by to the
-database. We would create a class Class that contains its own variables (fields) and its own methods. Next,
-when declaring a variable, or any time we look for a Type, we would need to check not only for the primitive
-types, but also search the ClassesDatabase for the class name. The best way would be to add return types to
-methods and each class would have a method that returns a type of the class itself (a constructor). We would
-also need to support calling methods and accessing fields of classes using the period character ('.'). If a
-class of the name is found in the database, and then a period is found, we then would search the class (from
-the database) for a method (if there is also a '(' character after the valid method name) or a field (if no
-'(' character).
-
-########################################      REGULAR EXPRESSIONS     ########################################
-
-The most widely used regular expression is - "\\s*;\\s*$"
-This regex is saved in a constant named STATEMENT_SUFFIX_REGEX. The regex is a greedy regex, and it
-represents a string of any amount of whitespace, followed by a semicolon, followed by any amount of
-whitespace, followed by the end of the line. The end of the line is important here, because that means that
-after the semicolon, no other character (other than whitespace) is allowed to be in the line. If this regex
-is found in a line, we can say for a fact that the line is meant to be a statement.
-
-Another important regular expression we use is - "^\\s*([a-zA-Z]\\w*)\\s*[(]"
-This regex is saved in a constant named METHOD_CALL_PREFIX_REGEX. The regex is a greedy regex, and it
-represents a string that begins at the start of the line with any amount of whitespace, followed by a
-grouping that starts with a letter (uppercase or lowercase), followed by any amount of word characters
-(letters, numbers, and underscore), and the grouping closes. Then, we have again any amount of whitespace,
-followed by a single '(' character. The grouping in this regex can later be extracted to get a valid method
-name. If we find this regex in a line of code, we know that it starts with a method call prefix, since it
-starts with a valid method name, and is followed by a open parentheses character.

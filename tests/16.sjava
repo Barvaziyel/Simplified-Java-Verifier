@@ -1,0 +1,8 @@
+boolean x;
+boolean xx = true;
+boolean xxx = false;
+boolean xxxx = xxx;
+boolean xxxxx = 1;
+boolean xxxxxx = 1.;
+int y = -2;
+boolean xxxxxxx = y;

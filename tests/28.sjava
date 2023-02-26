@@ -1,0 +1,14 @@
+int x;
+void foo() {
+    int x;
+    if (true) {
+        int x;
+        if (true) {
+            int x;
+            if (true) {
+                int x;
+            }
+        }
+    }
+    return;
+}

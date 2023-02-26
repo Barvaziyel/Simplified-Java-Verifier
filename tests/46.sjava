@@ -1,0 +1,36 @@
+int a, b=4;
+
+ void  foo  ( int f4, double b , final boolean t , boolean x ){  
+int c  = f4;
+int h;
+while(false &&b) {
+a=1, b=6.7;
+h=3;
+}
+a=h;
+
+// knesfjn af 
+return;
+}
+//b=a;
+b=6;
+String c;
+c="24|f" , b=4;
+final  char _g =   'v';
+
+void fi(String v,  final double p  ,int ta) {
+
+//
+foo(ta, ta, p  , ta   )      ;
+if (ta) {
+foo (b, p , b,   p);
+//d
+c=v;
+  	 return;
+v=c;
+}
+//p=a;
+//
+return;
+}
+		  final   char m=_g; 

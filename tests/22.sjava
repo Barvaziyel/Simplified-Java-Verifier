@@ -1,0 +1,4 @@
+int x;
+int xx = 1;
+int a, b, c;
+int aa, bb =1, cc, dd = 55;

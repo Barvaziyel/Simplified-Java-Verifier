@@ -1,0 +1,13 @@
+int x;
+void foo() {
+    int x;
+    return;
+}
+void goo() {
+    int x;
+    return;
+}
+void hoo() {
+    int x;
+    return;
+}

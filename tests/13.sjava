@@ -1,0 +1,6 @@
+double x = 1;
+double xx = 1.1;
+double xxx = 1.;
+double xxxx = .1;
+double xxxxx = 00001;
+double xxxxxx = -.2;

@@ -1,0 +1,17 @@
+void x(){
+return;
+}
+
+void xx(){
+return;
+return;
+return;
+}
+
+void xxx(int x, double b, boolean c, String d, char e){
+return;
+}
+
+void xxxx(final int v){
+return;
+}

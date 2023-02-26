@@ -1,0 +1,4 @@
+int x = 1;
+int xx = 0001;
+int xxx = xx;
+int xxxx = -050;

@@ -229,6 +229,11 @@ public class Driver {
         line = line.substring(m.end());
         m = isValidVarName(line);
         name = m.group(VAR_NAME_GROUP);
+        for (Variable param : params) {
+            if (param.getName().equals(name)) {
+                throw new IllegalNameException(ILLEGAL_VAR_NAME_ERR_MSG);
+            }
+        }
         params.add(new Variable(name, type, isFinal, true));
         line = line.substring(m.end()); //trim line
         return line;
